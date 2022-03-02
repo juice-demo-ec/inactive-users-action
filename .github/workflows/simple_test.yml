@@ -9,7 +9,7 @@ on:
         
       organization:
         description: The organization to process
-        default: octodemo
+        default: juice-demo-ec
         
       activity_days:
         description: The number of days to use to analyze activity
