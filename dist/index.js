@@ -9430,7 +9430,7 @@ module.exports = class OrganizationUserActivity {
     const self = this;
 
     const repositories = await self.organizationClient.getRepositories(org)
-      , orgUsers = await self.organizationClient.findUsers(org)
+      , orgUsers = await self.organizationClient.findCollaborators(org)
     ;
 
     const activityResults = {};
@@ -9838,6 +9838,18 @@ module.exports = class Organization {
   }
 
   findUsers(org) {
+    return this.octokit.paginate("GET /orgs/:org/members", {org: org, per_page: 100})
+      .then(members => {
+        return members.map(member => {
+          return {
+            login: member.login,
+            email: member.email || ''
+          };
+        });
+      });
+  }
+
+  findCollaborators(org) {
     return this.octokit.paginate("GET /orgs/:org/members", {org: org, per_page: 100})
       .then(members => {
         return members.map(member => {
